@@ -5,23 +5,19 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  ScrollView,
-  TouchableWithoutFeedback,
-  Keyboard,
 } from "react-native";
 
 //svg
 import { SvgXml } from "react-native-svg";
 
 //react native elements
-import { Input, Icon, Button, CheckBox } from "@rneui/themed";
+import { Input, Button, CheckBox } from "@rneui/themed";
 
 //KeyboardAwareScrollView
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 //svg icons
 import { hms_icon } from "../../assets/svg/hospital_icon";
-import { Ionicons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
@@ -33,19 +29,11 @@ const Signup = (props) => {
   const [female, setF] = useState(false);
 
   const { width, height } = Dimensions.get("window");
-  {
-    /* <ScrollView
-    contentContainerStyle={[
-      styles.container,
-      { marginTop: height - height * 0.95 },
-    ]}
-  > */
-  }
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={[
         styles.container,
-        { marginTop: height - height * 0.95 },
+        { paddingTop: height - height * 0.95 },
       ]}
     >
       <View style={styles.banner}>
