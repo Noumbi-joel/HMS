@@ -23,6 +23,7 @@ import { un_chatting_icon } from "../assets/svg/unfocused/un_chatting";
 import { un_planning_icon } from "../assets/svg/unfocused/un_planning";
 import { un_profile_icon } from "../assets/svg/unfocused/un_profile";
 import { un_stethoscope_icon } from "../assets/svg/unfocused/un_stethoscope";
+import { alarm } from "../assets/svg/alarm";
 
 //navigation container
 import { NavigationContainer } from "@react-navigation/native";
@@ -51,7 +52,7 @@ import { colors } from "../utils/colors";
 
 const appTheme = {
   colors: {
-    background: colors.white,
+    background: "#eae0f4",
   },
 };
 
@@ -126,7 +127,23 @@ const ProfileStack = (props) => {
 const AppTabs = (props) => {
   return (
     <Tab.Navigator
-      screenOptions={{ tabBarStyle: styles.tabBarStyle, headerShown: false }}
+      screenOptions={{
+        tabBarStyle: styles.tabBarStyle,
+        headerRight: () => (
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#f7f1e3",
+              width: "30%",
+              marginTop: 10,
+              marginRight: 10,
+              borderRadius: 50,
+              paddingVertical: 10,
+            }}
+          >
+            <SvgXml xml={alarm} width="100%" height="100%" />
+          </TouchableOpacity>
+        ),
+      }}
       initialRouteName="homestack"
     >
       <Tab.Screen
@@ -141,6 +158,14 @@ const AppTabs = (props) => {
             />
           ),
           tabBarLabel: "",
+          headerTitle: () => (
+            <View style={styles.header_home}>
+              <Text style={styles.text_header_home}>Hi Nicolas,</Text>
+              <Text style={styles.text_header_home_snd}>
+                Let's find your doctor
+              </Text>
+            </View>
+          ),
         }}
       />
 
@@ -220,6 +245,25 @@ const AppNavigator = (props) => {
 const styles = StyleSheet.create({
   tabBarStyle: {
     backgroundColor: colors.white,
+    paddingBottom: 10,
+    paddingTop: 30,
+    paddingHorizontal: 10,
+    height: 80,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderColor: "transparent",
+  },
+  text_header_home: {
+    fontFamily: "Poppins",
+    fontSize: 25,
+  },
+  text_header_home_snd: {
+    fontFamily: "Montserrat",
+    fontSize: 15,
+    color: "#918799",
+  },
+  header_home: {
+    paddingTop: 10,
   },
 });
 
