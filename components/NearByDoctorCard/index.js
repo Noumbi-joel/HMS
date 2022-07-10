@@ -17,9 +17,12 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Divider } from "@rneui/themed";
 
 const NearByDoctorCard = (props) => {
-  const { width, height } = Dimensions.get("window");
+  const { width } = Dimensions.get("window");
   return (
-    <View style={[styles.container, { width: width - width * 0.08 }]}>
+    <TouchableOpacity
+      onPress={() => props.navigation.navigate("doctorProfile")}
+      style={[styles.container, { width: width - width * 0.08 }]}
+    >
       <View style={styles.linearLayout}>
         <Image source={anime} style={styles.docImg} />
         <View style={{ marginLeft: 10 }}>
@@ -111,7 +114,7 @@ const NearByDoctorCard = (props) => {
           </Text>
         </View>
       </ScrollView>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -128,7 +131,9 @@ export const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50,
-    backgroundColor: "red",
+    backgroundColor: "#8a33ff",
+    borderWidth: 2,
+    borderColor: "#fff"
   },
   linearLayout: {
     flexDirection: "row",

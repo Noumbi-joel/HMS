@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
+  Modal,
 } from "react-native";
 
 import { Input } from "@rneui/themed";
@@ -13,21 +14,42 @@ import { AntDesign } from "@expo/vector-icons";
 
 //components
 import NearByDoctorCard from "../../../components/NearByDoctorCard";
+import SearchDoctor from "../../../components/SearchDoctor";
 
-const Home = () => {
+const Home = (props) => {
+  const [modalVisible, setModalVisile] = useState(false);
+
   const { width } = Dimensions.get("window");
   return (
     <View style={styles.container}>
+      <Modal visible={modalVisible} transparent animationType="slide">
+        <SearchDoctor setModalVisile={setModalVisile} />
+      </Modal>
+
       <Input
         placeholder="Search doctor"
         containerStyle={{ alignItems: "center" }}
-        inputContainerStyle={[styles.input, { width: width - width * 0.08 }]}
-        leftIcon={<AntDesign name="search1" size={24} color="#9881b4" />}
+        inputContainerStyle={[
+          styles.input,
+          { width: width - width * 0.08, height: 60 },
+        ]}
+        leftIcon={
+          <TouchableOpacity onPress={() => setModalVisile(true)}>
+            <AntDesign name="search1" size={24} color="#9881b4" />
+          </TouchableOpacity>
+        }
+        leftIconContainerStyle={{
+          backgroundColor: "#eae0f4",
+          padding: 5,
+          borderRadius: 50,
+          width: 40,
+          marginRight: 5,
+        }}
       />
 
       <View style={styles.btm_search_container}>
         <Text
-          style={{ fontFamily: "Poppins", fontSize: 22, marginVertical: 25 }}
+          style={{ fontFamily: "Poppins", fontSize: 22, marginVertical: 15 }}
         >
           Nearby Doctors
         </Text>
@@ -35,8 +57,8 @@ const Home = () => {
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
-          <NearByDoctorCard verified />
-          <NearByDoctorCard />
+          <NearByDoctorCard {...props} verified />
+          <NearByDoctorCard {...props} />
         </ScrollView>
       </View>
     </View>

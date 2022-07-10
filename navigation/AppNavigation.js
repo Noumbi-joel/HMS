@@ -43,6 +43,7 @@ import Chatting from "../screens/patient/chatting";
 import PastReview from "../screens/patient/past_review";
 import Planning from "../screens/patient/planning";
 import Profile from "../screens/patient/profile";
+import DoctorProfile from "../screens/patient/home/DoctorProfile";
 
 /* import ForgotPassword from "../screens/Auth/ForgotPassword";
  */
@@ -71,11 +72,40 @@ const AuthStack = (props) => {
 
 const HomeStack = (props) => {
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false }}
-      initialRouteName="home"
-    >
-      <Stack.Screen name="home" component={Home} />
+    <Stack.Navigator initialRouteName="home">
+      <Stack.Screen
+        name="home"
+        options={{
+          headerRight: () => (
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#f7f1e3",
+                width: "30%",
+                marginTop: 10,
+                marginRight: 10,
+                borderRadius: 50,
+                paddingVertical: 10,
+              }}
+            >
+              <SvgXml xml={alarm} width="100%" height="100%" />
+            </TouchableOpacity>
+          ),
+          headerTitle: () => (
+            <View style={styles.header_home}>
+              <Text style={styles.text_header_home}>Hi Nicolas,</Text>
+              <Text style={styles.text_header_home_snd}>
+                Let's find your doctor
+              </Text>
+            </View>
+          ),
+        }}
+        component={Home}
+      />
+      <Stack.Screen
+        options={{ headerTitle: "Doctor Profile" }}
+        name="doctorProfile"
+        component={DoctorProfile}
+      />
     </Stack.Navigator>
   );
 };
@@ -129,20 +159,6 @@ const AppTabs = (props) => {
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: styles.tabBarStyle,
-        headerRight: () => (
-          <TouchableOpacity
-            style={{
-              backgroundColor: "#f7f1e3",
-              width: "30%",
-              marginTop: 10,
-              marginRight: 10,
-              borderRadius: 50,
-              paddingVertical: 10,
-            }}
-          >
-            <SvgXml xml={alarm} width="100%" height="100%" />
-          </TouchableOpacity>
-        ),
       }}
       initialRouteName="homestack"
     >
@@ -157,15 +173,8 @@ const AppTabs = (props) => {
               height="100%"
             />
           ),
+          headerShown: false,
           tabBarLabel: "",
-          headerTitle: () => (
-            <View style={styles.header_home}>
-              <Text style={styles.text_header_home}>Hi Nicolas,</Text>
-              <Text style={styles.text_header_home_snd}>
-                Let's find your doctor
-              </Text>
-            </View>
-          ),
         }}
       />
 
