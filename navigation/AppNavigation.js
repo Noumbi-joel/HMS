@@ -84,11 +84,40 @@ const AuthStack = (props) => {
 // doctors
 const HomeDoctorStack = (props) => {
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false }}
-      initialRouteName="homeDoctor"
-    >
-      <Stack.Screen name="homeDoctor" component={HomeDoctor} />
+    <Stack.Navigator initialRouteName="homeDoctor">
+      <Stack.Screen
+        options={{
+          headerTitle: () => (
+            <View style={styles.header_home}>
+              <Text
+                style={{
+                  color: "#6e6d7b",
+                  fontSize: 16,
+                  fontFamily: "Montserrat",
+                }}
+              >
+                Good morning,
+              </Text>
+              <Text
+                style={{
+                  color: "#231e29",
+                  fontSize: 20,
+                  fontFamily: "Poppins",
+                }}
+              >
+                Maurice Robbins
+              </Text>
+            </View>
+          ),
+          headerRight: () => (
+            <TouchableOpacity style={styles.headerRightContainer}>
+              <SvgXml xml={alarm} width="100%" height="100%" />
+            </TouchableOpacity>
+          ),
+        }}
+        name="homeDoctor"
+        component={HomeDoctor}
+      />
     </Stack.Navigator>
   );
 };
@@ -137,7 +166,6 @@ const SettingsDoctorStack = (props) => {
   );
 };
 
-
 //patient
 const HomeStack = (props) => {
   return (
@@ -146,16 +174,7 @@ const HomeStack = (props) => {
         name="home"
         options={{
           headerRight: () => (
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#f7f1e3",
-                width: "30%",
-                marginTop: 10,
-                marginRight: 10,
-                borderRadius: 50,
-                paddingVertical: 10,
-              }}
-            >
+            <TouchableOpacity style={styles.headerRightContainer}>
               <SvgXml xml={alarm} width="100%" height="100%" />
             </TouchableOpacity>
           ),
@@ -234,86 +253,85 @@ const AppTabs = (props) => {
     >
       {isDoctor ? (
         <>
-        <Tab.Screen
-          name="homeStackDoctor"
-          component={HomeDoctorStack}
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <SvgXml
-                xml={focused ? un_home_icon : home_icon}
-                width="100%"
-                height="100%"
-              />
-            ),
-            headerShown: false,
-            tabBarLabel: "",
-          }}
-        />
+          <Tab.Screen
+            name="homeStackDoctor"
+            component={HomeDoctorStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <SvgXml
+                  xml={focused ? un_home_icon : home_icon}
+                  width="100%"
+                  height="100%"
+                />
+              ),
+              headerShown: false,
+              tabBarLabel: "",
+            }}
+          />
 
-        <Tab.Screen
-          name="planningDoctorStack"
-          component={PlanningDoctorStack}
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <SvgXml
-                xml={focused ? un_planning_icon : planning_icon}
-                width="100%"
-                height="100%"
-              />
-            ),
-            headerShown: false,
-            tabBarLabel: "",
-          }}
-        />
+          <Tab.Screen
+            name="planningDoctorStack"
+            component={PlanningDoctorStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <SvgXml
+                  xml={focused ? un_planning_icon : planning_icon}
+                  width="100%"
+                  height="100%"
+                />
+              ),
+              headerShown: false,
+              tabBarLabel: "",
+            }}
+          />
 
-        <Tab.Screen
-          name="chattingDoctorStack"
-          component={ChattingDoctorStack}
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <SvgXml
-                xml={focused ? un_chatting_icon : chatting_icon}
-                width="100%"
-                height="100%"
-              />
-            ),
-            headerShown: false,
-            tabBarLabel: "",
-          }}
-        />
+          <Tab.Screen
+            name="chattingDoctorStack"
+            component={ChattingDoctorStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <SvgXml
+                  xml={focused ? un_chatting_icon : chatting_icon}
+                  width="100%"
+                  height="100%"
+                />
+              ),
+              headerShown: false,
+              tabBarLabel: "",
+            }}
+          />
 
-        <Tab.Screen
-          name="patientReportsStack"
-          component={PatientReportsStack}
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <SvgXml
-                xml={focused ? patient_report : un_patient_report }
-                width="100%"
-                height="100%"
-              />
-            ),
-            headerShown: false,
-            tabBarLabel: "",
-          }}
-        />
+          <Tab.Screen
+            name="patientReportsStack"
+            component={PatientReportsStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <SvgXml
+                  xml={focused ? patient_report : un_patient_report}
+                  width="100%"
+                  height="100%"
+                />
+              ),
+              headerShown: false,
+              tabBarLabel: "",
+            }}
+          />
 
-        <Tab.Screen
-          name="settingsDoctorStack"
-          component={SettingsDoctorStack}
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <SvgXml
-                xml={focused ? settings : un_settings}
-                width="100%"
-                height="100%"
-              />
-            ),
-            headerShown: false,
-            tabBarLabel: "",
-          }}
-        />
-        
+          <Tab.Screen
+            name="settingsDoctorStack"
+            component={SettingsDoctorStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <SvgXml
+                  xml={focused ? settings : un_settings}
+                  width="100%"
+                  height="100%"
+                />
+              ),
+              headerShown: false,
+              tabBarLabel: "",
+            }}
+          />
         </>
       ) : (
         <>
@@ -430,6 +448,14 @@ const styles = StyleSheet.create({
   },
   header_home: {
     paddingTop: 10,
+  },
+  headerRightContainer: {
+    backgroundColor: "#fff",
+    width: "30%",
+    marginTop: 10,
+    marginRight: 10,
+    borderRadius: 50,
+    paddingVertical: 10,
   },
 });
 
