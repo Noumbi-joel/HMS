@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 
 //tab navigator
@@ -16,14 +16,18 @@ import { chatting_icon } from "../assets/svg/chatting_icon";
 import { planning_icon } from "../assets/svg/planning_icon";
 import { profile_icon } from "../assets/svg/profile_icon";
 import { stethoscope_icon } from "../assets/svg/stethoscope_icon";
+import { alarm } from "../assets/svg/alarm";
+import { settings } from "../assets/svg/settings";
+import { patient_report } from "../assets/svg/patient_report";
 
 //unfocused svg
 import { un_home_icon } from "../assets/svg/unfocused/un_home";
 import { un_chatting_icon } from "../assets/svg/unfocused/un_chatting";
 import { un_planning_icon } from "../assets/svg/unfocused/un_planning";
 import { un_profile_icon } from "../assets/svg/unfocused/un_profile";
+import { un_settings } from "../assets/svg/unfocused/un_settings";
 import { un_stethoscope_icon } from "../assets/svg/unfocused/un_stethoscope";
-import { alarm } from "../assets/svg/alarm";
+import { un_patient_report } from "../assets/svg/unfocused/un_patient_reports";
 
 //navigation container
 import { NavigationContainer } from "@react-navigation/native";
@@ -44,6 +48,13 @@ import PastReview from "../screens/patient/past_review";
 import Planning from "../screens/patient/planning";
 import Profile from "../screens/patient/profile";
 import DoctorProfile from "../screens/patient/home/DoctorProfile";
+
+//Doctor Stack
+import HomeDoctor from "../screens/doctor/home";
+import PlanningDoctor from "../screens/doctor/planning";
+import ChattingDoctor from "../screens/doctor/chatting";
+import SettingsDoctor from "../screens/doctor/settings";
+import PatientReportsDoctor from "../screens/doctor/patient_reports";
 
 /* import ForgotPassword from "../screens/Auth/ForgotPassword";
  */
@@ -70,6 +81,64 @@ const AuthStack = (props) => {
   );
 };
 
+// doctors
+const HomeDoctorStack = (props) => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="homeDoctor"
+    >
+      <Stack.Screen name="homeDoctor" component={HomeDoctor} />
+    </Stack.Navigator>
+  );
+};
+
+const PlanningDoctorStack = (props) => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="planningDoctor"
+    >
+      <Stack.Screen name="planningDoctor" component={PlanningDoctor} />
+    </Stack.Navigator>
+  );
+};
+
+const ChattingDoctorStack = (props) => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="chattingDoctor"
+    >
+      <Stack.Screen name="chattingDoctor" component={ChattingDoctor} />
+    </Stack.Navigator>
+  );
+};
+
+const PatientReportsStack = (props) => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="patientReports"
+    >
+      <Stack.Screen name="patientReports" component={PatientReportsDoctor} />
+    </Stack.Navigator>
+  );
+};
+
+const SettingsDoctorStack = (props) => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="settingsDoctor"
+    >
+      <Stack.Screen name="settingsDoctor" component={SettingsDoctor} />
+    </Stack.Navigator>
+  );
+};
+
+
+//patient
 const HomeStack = (props) => {
   return (
     <Stack.Navigator initialRouteName="home">
@@ -155,88 +224,176 @@ const ProfileStack = (props) => {
 };
 
 const AppTabs = (props) => {
+  const [isDoctor, setIsDoctor] = useState(true);
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: styles.tabBarStyle,
       }}
-      initialRouteName="homestack"
+      initialRouteName={isDoctor ? "homeStackDoctor" : "homeStack"}
     >
-      <Tab.Screen
-        name="homestack"
-        component={HomeStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <SvgXml
-              xml={focused ? un_home_icon : home_icon}
-              width="100%"
-              height="100%"
-            />
-          ),
-          headerShown: false,
-          tabBarLabel: "",
-        }}
-      />
+      {isDoctor ? (
+        <>
+        <Tab.Screen
+          name="homeStackDoctor"
+          component={HomeDoctorStack}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <SvgXml
+                xml={focused ? un_home_icon : home_icon}
+                width="100%"
+                height="100%"
+              />
+            ),
+            headerShown: false,
+            tabBarLabel: "",
+          }}
+        />
 
-      <Tab.Screen
-        name="planningstack"
-        component={PlanningStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <SvgXml
-              xml={focused ? un_planning_icon : planning_icon}
-              width="100%"
-              height="100%"
-            />
-          ),
-          tabBarLabel: "",
-        }}
-      />
+        <Tab.Screen
+          name="planningDoctorStack"
+          component={PlanningDoctorStack}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <SvgXml
+                xml={focused ? un_planning_icon : planning_icon}
+                width="100%"
+                height="100%"
+              />
+            ),
+            headerShown: false,
+            tabBarLabel: "",
+          }}
+        />
 
-      <Tab.Screen
-        name="chattingstack"
-        component={ChattingStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <SvgXml
-              xml={focused ? un_chatting_icon : chatting_icon}
-              width="100%"
-              height="100%"
-            />
-          ),
-          tabBarLabel: "",
-        }}
-      />
+        <Tab.Screen
+          name="chattingDoctorStack"
+          component={ChattingDoctorStack}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <SvgXml
+                xml={focused ? un_chatting_icon : chatting_icon}
+                width="100%"
+                height="100%"
+              />
+            ),
+            headerShown: false,
+            tabBarLabel: "",
+          }}
+        />
 
-      <Tab.Screen
-        name="pastreviewstack"
-        component={PastReviewStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <SvgXml
-              xml={focused ? un_stethoscope_icon : stethoscope_icon}
-              width="100%"
-              height="100%"
-            />
-          ),
-          tabBarLabel: "",
-        }}
-      />
+        <Tab.Screen
+          name="patientReportsStack"
+          component={PatientReportsStack}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <SvgXml
+                xml={focused ? patient_report : un_patient_report }
+                width="100%"
+                height="100%"
+              />
+            ),
+            headerShown: false,
+            tabBarLabel: "",
+          }}
+        />
 
-      <Tab.Screen
-        name="profilestack"
-        component={ProfileStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <SvgXml
-              xml={focused ? un_profile_icon : profile_icon}
-              width="100%"
-              height="100%"
-            />
-          ),
-          tabBarLabel: "",
-        }}
-      />
+        <Tab.Screen
+          name="settingsDoctorStack"
+          component={SettingsDoctorStack}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <SvgXml
+                xml={focused ? settings : un_settings}
+                width="100%"
+                height="100%"
+              />
+            ),
+            headerShown: false,
+            tabBarLabel: "",
+          }}
+        />
+        
+        </>
+      ) : (
+        <>
+          <Tab.Screen
+            name="homeStack"
+            component={HomeStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <SvgXml
+                  xml={focused ? un_home_icon : home_icon}
+                  width="100%"
+                  height="100%"
+                />
+              ),
+              headerShown: false,
+              tabBarLabel: "",
+            }}
+          />
+
+          <Tab.Screen
+            name="planningStack"
+            component={PlanningStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <SvgXml
+                  xml={focused ? un_planning_icon : planning_icon}
+                  width="100%"
+                  height="100%"
+                />
+              ),
+              tabBarLabel: "",
+            }}
+          />
+
+          <Tab.Screen
+            name="chattingStack"
+            component={ChattingStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <SvgXml
+                  xml={focused ? un_chatting_icon : chatting_icon}
+                  width="100%"
+                  height="100%"
+                />
+              ),
+              tabBarLabel: "",
+            }}
+          />
+
+          <Tab.Screen
+            name="pastReviewStack"
+            component={PastReviewStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <SvgXml
+                  xml={focused ? un_stethoscope_icon : stethoscope_icon}
+                  width="100%"
+                  height="100%"
+                />
+              ),
+              tabBarLabel: "",
+            }}
+          />
+
+          <Tab.Screen
+            name="profileStack"
+            component={ProfileStack}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <SvgXml
+                  xml={focused ? un_profile_icon : profile_icon}
+                  width="100%"
+                  height="100%"
+                />
+              ),
+              tabBarLabel: "",
+            }}
+          />
+        </>
+      )}
     </Tab.Navigator>
   );
 };

@@ -19,13 +19,13 @@ import { Divider } from "@rneui/themed";
 const NearByDoctorCard = (props) => {
   const { width } = Dimensions.get("window");
   return (
-    <TouchableOpacity
-      onPress={() => props.navigation.navigate("doctorProfile")}
-      style={[styles.container, { width: width - width * 0.08 }]}
-    >
+    <View style={[styles.container, { width: width - width * 0.08 }]}>
       <View style={styles.linearLayout}>
         <Image source={anime} style={styles.docImg} />
-        <View style={{ marginLeft: 10 }}>
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate("doctorProfile")}
+          style={{ marginLeft: 10 }}
+        >
           <View style={styles.linearLayout}>
             <Text style={styles.docName}>Dr Leonard Campbell</Text>
             {props.verified && (
@@ -40,7 +40,7 @@ const NearByDoctorCard = (props) => {
           <Text style={{ fontFamily: "Montserrat", color: "#635f69" }}>
             Cardiologist . 6 years of exp
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <Divider style={{ marginVertical: 10 }} />
       <View style={styles.linearLayout}>
@@ -114,7 +114,7 @@ const NearByDoctorCard = (props) => {
           </Text>
         </View>
       </ScrollView>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -133,7 +133,7 @@ export const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: "#8a33ff",
     borderWidth: 2,
-    borderColor: "#fff"
+    borderColor: "#fff",
   },
   linearLayout: {
     flexDirection: "row",
