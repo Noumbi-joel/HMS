@@ -47,7 +47,7 @@ const HomeDoctor = (props) => {
 
   return (
     <View style={styles.container}>
-      <PatientAppointment />
+      <PatientAppointment {...props} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={[styles.roundedComponent, { paddingTop: 30 }]}
@@ -82,13 +82,19 @@ const HomeDoctor = (props) => {
           <View style={styles.recentVisitorsBg}>
             <Image source={cuteBoy} style={styles.patientIcon} />
           </View>
-          <View style={[styles.recentVisitorsBg, {backgroundColor: "#b278ff"}]}>
+          <View
+            style={[styles.recentVisitorsBg, { backgroundColor: "#b278ff" }]}
+          >
             <Image source={cuteGirl} style={styles.patientIcon} />
           </View>
-          <View style={[styles.recentVisitorsBg, {backgroundColor: "#517df5"}]}>
+          <View
+            style={[styles.recentVisitorsBg, { backgroundColor: "#517df5" }]}
+          >
             <Image source={cuteBoy} style={styles.patientIcon} />
           </View>
-          <View style={[styles.recentVisitorsBg, {backgroundColor: "#3f206a"}]}>
+          <View
+            style={[styles.recentVisitorsBg, { backgroundColor: "#3f206a" }]}
+          >
             <Image source={cuteGirl} style={styles.patientIcon} />
           </View>
         </View>

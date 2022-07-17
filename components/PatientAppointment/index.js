@@ -17,7 +17,10 @@ import anime from "../../assets/png/anime.png";
 const PatientAppointment = (props) => {
   const { width } = Dimensions.get("window");
   return (
-    <View style={[styles.container, { width: width - width * 0.08 }]}>
+    <TouchableOpacity
+      onPress={() => props.navigation.navigate("appointDetails")}
+      style={[styles.container, { width: width - width * 0.08 }]}
+    >
       <View
         style={[
           styles.linearLayout,
@@ -33,7 +36,7 @@ const PatientAppointment = (props) => {
           <Text style={styles.hour}>Today, 8:00 - 8:30 am</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

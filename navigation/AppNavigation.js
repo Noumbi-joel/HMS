@@ -55,6 +55,7 @@ import PlanningDoctor from "../screens/doctor/planning";
 import ChattingDoctor from "../screens/doctor/chatting";
 import SettingsDoctor from "../screens/doctor/settings";
 import PatientReportsDoctor from "../screens/doctor/patient_reports";
+import AppointmentDetails from "../screens/doctor/home/AppointmentDetails";
 
 /* import ForgotPassword from "../screens/Auth/ForgotPassword";
  */
@@ -117,6 +118,11 @@ const HomeDoctorStack = (props) => {
         }}
         name="homeDoctor"
         component={HomeDoctor}
+      />
+      <Stack.Screen
+        options={{ headerTitle: "Appointment Details" }}
+        name="appointDetails"
+        component={AppointmentDetails}
       />
     </Stack.Navigator>
   );
