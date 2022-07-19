@@ -60,6 +60,10 @@ import AppointmentDetails from "../screens/doctor/home/AppointmentDetails";
 /* import ForgotPassword from "../screens/Auth/ForgotPassword";
  */
 
+import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import Toggle from "react-native-toggle-element";
+
 //colors
 import { colors } from "../utils/colors";
 
@@ -129,12 +133,48 @@ const HomeDoctorStack = (props) => {
 };
 
 const PlanningDoctorStack = (props) => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  let d = new Date();
+  const [toggleValue, setToggleValue] = useState(false);
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false }}
-      initialRouteName="planningDoctor"
-    >
-      <Stack.Screen name="planningDoctor" component={PlanningDoctor} />
+    <Stack.Navigator initialRouteName="planningDoctor">
+      <Stack.Screen
+        options={{
+          headerTitle: () => (
+            <Text style={{ fontFamily: "Poppins", fontSize: 20 }}>
+              {monthNames[d.getMonth()]} {d.getFullYear()}
+            </Text>
+          ),
+          headerRight: () => (
+            <Toggle
+              value={toggleValue}
+              onPress={(newState) => setToggleValue(newState)}
+              thumbStyle={{backgroundColor: "white"}}
+              trackBar={{inActiveBackgroundColor: "#dfe7f8", activeBackgroundColor: "#dfe7f8"}}
+              containerStyle={{ marginRight: 10 }}
+              leftComponent={
+                <AntDesign name="calendar" size={24} color="black" />
+              }
+              rightComponent={<Feather name="list" size={24} color="black" />}
+            />
+          ),
+        }}
+        name="planningDoctor"
+        component={PlanningDoctor}
+      />
     </Stack.Navigator>
   );
 };

@@ -126,6 +126,17 @@ const AppointmentDetails = (props) => {
             containerStyles={{ marginVertical: 20 }}
             onSwipeSuccess={() => props.navigation.goBack()}
           />
+
+          <Text
+            style={{
+              fontFamily: "Montserrat",
+              fontSize: 12,
+              marginBottom: 12,
+              textAlign: "center",
+            }}
+          >
+            Swipe to check in
+          </Text>
         </View>
       </ScrollView>
     </View>

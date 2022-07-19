@@ -18,13 +18,27 @@ const PatientAppointment = (props) => {
   const { width } = Dimensions.get("window");
   return (
     <TouchableOpacity
-      onPress={() => props.navigation.navigate("appointDetails")}
-      style={[styles.container, { width: width - width * 0.08 }]}
+      onPress={
+        props.percent
+          ? () => {}
+          : () => props.navigation.navigate("appointDetails")
+      }
+      style={[
+        styles.container,
+        props.percent
+          ? {
+              width: width - width * props.percent,
+              backgroundColor: props.bg,
+              marginVertical: 5,
+              alignSelf: "flex-end",
+            }
+          : { width: width - width * 0.08, backgroundColor: "#fff" },
+      ]}
     >
       <View
         style={[
           styles.linearLayout,
-          { backgroundColor: "#ffcbc2", borderRadius: 50, padding: 5 },
+          { backgroundColor: "#8a33ff", borderRadius: 50, padding: 5 },
         ]}
       >
         <Image source={anime} style={styles.patientIcon} />
@@ -43,7 +57,6 @@ const PatientAppointment = (props) => {
 const styles = StyleSheet.create({
   container: {
     height: 80,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
