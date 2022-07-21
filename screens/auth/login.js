@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 
 //svg
@@ -13,14 +14,38 @@ import { SvgXml } from "react-native-svg";
 //react native elements
 import { Input, Icon, Button } from "@rneui/themed";
 
+import firebase from "../../firebase";
+
 //svg icons
 import { hms_icon } from "../../assets/svg/hospital_icon";
-import { Ionicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
+import { AuthContext } from "../../store";
+
 const Login = (props) => {
   const [seePwd, setSeePwd] = useState(true);
+  const authCtx = useContext(AuthContext)
+
+  const onLogin = async (email, password) => {
+    try {
+      const res = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+
+      const token = await res.user.getIdToken();
+      authCtx.authenticate(token);
+      console.log("LOGIN TOKEN " + token);
+    } catch (err) {
+      Alert.alert(err.message);
+    }
+  };
+
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
 
   const { width, height } = Dimensions.get("window");
   return (
@@ -30,19 +55,23 @@ const Login = (props) => {
         <Text style={[styles.text, { fontSize: 25, fontWeight: "bold" }]}>
           STFG
         </Text>
-        <Text style={[styles.text, { fontSize: 22 }]}>Hospital Management System</Text>
+        <Text style={[styles.text, { fontSize: 22 }]}>
+          Hospital Management System
+        </Text>
       </View>
 
       <Input
-        placeholder="Mobile"
-        leftIcon={
-          <Ionicons name="ios-phone-portrait-outline" size={24} color="black" />
-        }
+        placeholder="Email"
+        leftIcon={<Entypo name="email" size={24} color="black" />}
         containerStyle={{ alignItems: "center" }}
+        value={user.email}
+        onChangeText={(val) => setUser({ ...user, email: val })}
         inputContainerStyle={{ width: width - width * 0.2 }}
       />
       <Input
         placeholder="******"
+        value={user.password}
+        onChangeText={(val) => setUser({ ...user, password: val })}
         leftIcon={<EvilIcons name="unlock" size={30} color="black" />}
         containerStyle={{ alignItems: "center" }}
         inputContainerStyle={{ width: width - width * 0.2 }}
@@ -59,6 +88,7 @@ const Login = (props) => {
 
       <Button
         title="Sign in"
+        onPress={() => onLogin(user.email, user.password)}
         buttonStyle={{
           backgroundColor: "rgba(78, 116, 289, 1)",
           borderRadius: 15,

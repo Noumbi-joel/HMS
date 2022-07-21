@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 
 import { Input, Button } from "@rneui/themed";
@@ -6,8 +6,11 @@ import { AntDesign } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+import { AuthContext } from "../../store";
+
 const SearchDoctor = (props) => {
   const { width } = Dimensions.get("window");
+  const authCtx = useContext(AuthContext);
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -29,7 +32,7 @@ const SearchDoctor = (props) => {
             marginBottom: 25,
             marginRight: 10,
           }}
-          onPress={() => props.setModalVisile(false)}
+          onPress={() => authCtx.logout()}
           titleStyle={{ fontWeight: "bold" }}
         />
 
@@ -43,7 +46,7 @@ const SearchDoctor = (props) => {
           leftIcon={<AntDesign name="search1" size={24} color="#9881b4" />}
           leftIconContainerStyle={styles.iconContainerStyle}
         />
-        
+
         <Input
           placeholder="Location"
           containerStyle={{ alignItems: "center" }}

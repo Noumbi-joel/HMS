@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 
 //tab navigator
@@ -6,6 +6,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 //stack navigator
 import { createStackNavigator } from "@react-navigation/stack";
+
+//context api
+import { AuthContext } from "../store";
 
 //svg xml
 import { SvgXml } from "react-native-svg";
@@ -289,7 +292,7 @@ const ProfileStack = (props) => {
 };
 
 const AppTabs = (props) => {
-  const [isDoctor, setIsDoctor] = useState(true);
+  const [isDoctor, setIsDoctor] = useState(false);
   return (
     <Tab.Navigator
       screenOptions={{
@@ -463,11 +466,11 @@ const AppTabs = (props) => {
 };
 
 const AppNavigator = (props) => {
+  const authCtx = useContext(AuthContext);
   return (
     <NavigationContainer theme={appTheme}>
-      <AppTabs />
-      {/* <AuthStack /> */}
-      {/* {authCtx.isAuthenticated && <AppTabs />} */}
+      {!authCtx.isAuthenticated && <AuthStack />}
+      {authCtx.isAuthenticated && <AppTabs />}
     </NavigationContainer>
   );
 };
