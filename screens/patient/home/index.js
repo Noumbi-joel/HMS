@@ -19,12 +19,38 @@ import NearByDoctorCard from "../../../components/NearByDoctorCard";
 import SearchDoctor from "../../../components/SearchDoctor";
 
 import { useSelector, useDispatch } from "react-redux";
+import LoadingOverlay from "../../../components/LoadingOverlay";
 
 const Home = (props) => {
   const [modalVisible, setModalVisile] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const doctors = useSelector((state) => state.user.doctors);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        setIsLoading(true);
+        const snapshot = await firebase.firestore().collection("Doctor").get();
+        if (!snapshot.empty) {
+          snapshot.docs.map((doc) => {
+            dispatch({ type: "FETCH_DOCTORS", payload: doc.data() });
+          });
+          return setIsLoading(false)
+        }
+      } catch (e) {
+        Alert.alert("FETCH DOCTORS ERROR");
+      }
+    };
+
+    fetchDoctors();
+  }, []);
 
   const { width } = Dimensions.get("window");
+
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
 
   return (
     <View style={styles.container}>
@@ -63,8 +89,12 @@ const Home = (props) => {
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
-          <NearByDoctorCard {...props} verified />
-          <NearByDoctorCard {...props} />
+          {doctors.length &&
+            doctors.map((doc) => (
+              <>
+                <NearByDoctorCard doc={doc} {...props} verified />
+              </>
+            ))}
         </ScrollView>
       </View>
     </View>

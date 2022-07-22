@@ -1,13 +1,28 @@
 const initialState = {
-  user: null,
-  docEmails: ["jeje@gmail.com", "albert@gmail.com", "leonelb@gmail.com"],
+  doctor: null,
+  patient: null,
+  doctors: [],
   loading: false,
 };
 
 const user = (state = initialState, action) => {
   switch (action.type) {
-    case "ADD_DOC_EMAIL":
-        return state.docEmails.push(action.payload);
+    case "SAVE_DOC":
+      return {
+        ...state,
+        doctor: action.payload,
+      };
+    case "SAVE_PAT":
+      return {
+        ...state,
+        patient: action.payload,
+      };
+
+    case "FETCH_DOCTORS":
+      return {
+        ...state,
+        doctors: [...state.doctors, action.payload],
+      };
     default:
       return state;
   }

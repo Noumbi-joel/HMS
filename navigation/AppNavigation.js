@@ -73,6 +73,9 @@ import Toggle from "react-native-toggle-element";
 import { colors } from "../utils/colors";
 import LoadingOverlay from "../components/LoadingOverlay";
 
+import { useSelector, useDispatch } from "react-redux";
+import { saveDoctor, savePatient } from "../redux/actions/user";
+
 const appTheme = {
   colors: {
     background: "#eae0f4",
@@ -227,6 +230,7 @@ const SettingsDoctorStack = (props) => {
 
 //patient
 const HomeStack = (props) => {
+  const patient = useSelector((state) => state.user.patient);
   return (
     <Stack.Navigator initialRouteName="home">
       <Stack.Screen
@@ -239,7 +243,7 @@ const HomeStack = (props) => {
           ),
           headerTitle: () => (
             <View style={styles.header_home}>
-              <Text style={styles.text_header_home}>Hi Nicolas,</Text>
+              <Text style={styles.text_header_home}>Hi, {patient?.name}</Text>
               <Text style={styles.text_header_home_snd}>
                 Let's find your doctor
               </Text>
@@ -304,6 +308,7 @@ const ProfileStack = (props) => {
 const AppTabs = (props) => {
   const [isDoctor, setIsDoctor] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
   const uid = firebase.auth().currentUser.uid;
   useEffect(() => {
     firebase
@@ -316,16 +321,27 @@ const AppTabs = (props) => {
           setIsDoctor(true);
           setIsLoading(false);
           console.log(user.data());
+          dispatch(saveDoctor(user.data()));
         }
-        if(!user.data()) {
+      })
+      .catch((err) => console.error(err.message));
+
+    firebase
+      .firestore()
+      .collection("patient")
+      .doc(uid)
+      .get()
+      .then((user) => {
+        if (user.data()) {
           setIsLoading(false);
+          dispatch(savePatient(user.data()));
         }
       })
       .catch((err) => console.error(err.message));
   }, []);
 
-  if(isLoading){
-    return <LoadingOverlay />
+  if (isLoading) {
+    return <LoadingOverlay />;
   }
 
   return (

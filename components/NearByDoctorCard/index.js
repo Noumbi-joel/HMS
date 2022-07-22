@@ -27,7 +27,7 @@ const NearByDoctorCard = (props) => {
           style={{ marginLeft: 10 }}
         >
           <View style={styles.linearLayout}>
-            <Text style={styles.docName}>Dr Leonard Campbell</Text>
+            <Text style={styles.docName}>Dr {props.doc?.name}</Text>
             {props.verified && (
               <Ionicons
                 name="checkmark-circle"
@@ -38,7 +38,7 @@ const NearByDoctorCard = (props) => {
             )}
           </View>
           <Text style={{ fontFamily: "Montserrat", color: "#635f69" }}>
-            Cardiologist . 6 years of exp
+            {props.doc?.speciality} . {props.doc?.exp} of exp
           </Text>
         </TouchableOpacity>
       </View>
@@ -62,7 +62,7 @@ const NearByDoctorCard = (props) => {
         <Text
           style={{ fontFamily: "Montserrat", color: "#68636d", marginLeft: 10 }}
         >
-          421 Ambarukmo St, Brooklyn, NY
+          {props.doc?.city}, {props.doc?.country}
         </Text>
       </View>
 
