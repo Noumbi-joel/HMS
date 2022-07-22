@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 
 //global app navigation
@@ -7,15 +7,29 @@ import AppNavigator from "./navigation/AppNavigation";
 //appLoading
 import AppLoading from "expo-app-loading";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+/* import AsyncStorage from "@react-native-async-storage/async-storage"; */
 
 //fonts
 import * as Font from "expo-font";
 import AuthContextProvider from "./store";
+/* import { AuthContext } from "./store"; */
 
 export default function App() {
+  /* const authCtx = useContext(AuthContext); */
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [isTryingLoggin, setIsTryingLoggin] = useState(true);
+  /* const [isTryingLoggin, setIsTryingLoggin] = useState(true);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const storedToken = await AsyncStorage.getItem("token");
+      if (storedToken) {
+        authCtx.authenticate(storedToken);
+      }
+    };
+    fetchToken();
+    console.log("re render")
+  }, []); */
+  
 
   const loadFont = async () => {
     await Font.loadAsync({
@@ -34,16 +48,6 @@ export default function App() {
     );
   }
 
-  useEffect(() => {
-    const fetchToken = async () => {
-      const storedToken = await AsyncStorage.getItem("token");
-      if (storedToken) {
-        authCtx.authenticate(storedToken);
-      }
-      setIsTryingLoggin(false);
-    };
-    fetchToken();
-  }, []);
 
   return (
     <AuthContextProvider>
