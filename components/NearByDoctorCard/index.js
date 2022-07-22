@@ -9,7 +9,8 @@ import {
   ScrollView,
 } from "react-native";
 
-import anime from "../../assets/png/anime.png";
+import men from "../../assets/png/men.jpg";
+import women from "../../assets/png/women.png";
 import { Ionicons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -18,12 +19,20 @@ import { Divider } from "@rneui/themed";
 
 const NearByDoctorCard = (props) => {
   const { width } = Dimensions.get("window");
+
   return (
     <View style={[styles.container, { width: width - width * 0.08 }]}>
       <View style={styles.linearLayout}>
-        <Image source={anime} style={styles.docImg} />
+        {props.doc?.gender === "male" ? (
+          <Image source={men} style={styles.docImg} />
+        ) : (
+          <Image source={women} style={styles.docImg} />
+        )}
+
         <TouchableOpacity
-          onPress={() => props.navigation.navigate("doctorProfile")}
+          onPress={() =>
+            props.navigation.navigate("doctorProfile", { doctor: props.doc })
+          }
           style={{ marginLeft: 10 }}
         >
           <View style={styles.linearLayout}>
@@ -37,9 +46,7 @@ const NearByDoctorCard = (props) => {
               />
             )}
           </View>
-          <Text style={{ fontFamily: "Montserrat", color: "#635f69" }}>
-            {props.doc?.speciality} . {props.doc?.exp} of exp
-          </Text>
+          <Text style={{ fontFamily: "Montserrat", color: "#635f69" }}>{props.doc?.speciality} . {props.doc?.exp} of exp</Text>
         </TouchableOpacity>
       </View>
       <Divider style={{ marginVertical: 10 }} />
@@ -85,34 +92,19 @@ const NearByDoctorCard = (props) => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.linearLayout}
       >
-        <View style={styles.hour}>
-          <Text
-            style={{ fontFamily: "Poppins", color: "#623f8c", marginLeft: 10 }}
-          >
-            8h30 am
-          </Text>
-        </View>
-        <View style={styles.hour}>
-          <Text
-            style={{ fontFamily: "Poppins", color: "#623f8c", marginLeft: 10 }}
-          >
-            8h30 am
-          </Text>
-        </View>
-        <View style={styles.hour}>
-          <Text
-            style={{ fontFamily: "Poppins", color: "#623f8c", marginLeft: 10 }}
-          >
-            8h30 am
-          </Text>
-        </View>
-        <View style={styles.hour}>
-          <Text
-            style={{ fontFamily: "Poppins", color: "#623f8c", marginLeft: 10 }}
-          >
-            8h30 am
-          </Text>
-        </View>
+        {props.doc?.time.split(",").map((time, index) => (
+          <View style={styles.hour} key={index}>
+            <Text
+              style={{
+                fontFamily: "Poppins",
+                color: "#623f8c",
+                marginLeft: 10,
+              }}
+            >
+              {time} am
+            </Text>
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
@@ -146,7 +138,8 @@ export const styles = StyleSheet.create({
   hour: {
     padding: 5,
     borderRadius: 50,
-    width: 90,
+    width: 95,
+    marginLeft: 10,
     backgroundColor: "#f7f2ff",
   },
 });

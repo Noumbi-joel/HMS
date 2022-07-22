@@ -341,7 +341,7 @@ const AppTabs = (props) => {
   }, []);
 
   if (isLoading) {
-    return <LoadingOverlay />;
+    return <LoadingOverlay />
   }
 
   return (

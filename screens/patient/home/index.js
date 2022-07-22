@@ -33,13 +33,14 @@ const Home = (props) => {
         setIsLoading(true);
         const snapshot = await firebase.firestore().collection("Doctor").get();
         if (!snapshot.empty) {
-          snapshot.docs.map((doc) => {
+          return snapshot.docs.map((doc) => {
             dispatch({ type: "FETCH_DOCTORS", payload: doc.data() });
           });
-          return setIsLoading(false)
         }
       } catch (e) {
         Alert.alert("FETCH DOCTORS ERROR");
+      }finally{
+        setIsLoading(false)
       }
     };
 
@@ -48,8 +49,8 @@ const Home = (props) => {
 
   const { width } = Dimensions.get("window");
 
-  if (isLoading) {
-    return <LoadingOverlay />;
+  if(isLoading){
+    return <LoadingOverlay />
   }
 
   return (
@@ -89,12 +90,14 @@ const Home = (props) => {
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
-          {doctors.length &&
-            doctors.map((doc) => (
-              <>
-                <NearByDoctorCard doc={doc} {...props} verified />
-              </>
-            ))}
+{/*           {!doctors.length && <Text>No doctor available</Text>}
+ */}
+
+          {doctors.map((doc, index) => (
+            <View key={index}>
+              <NearByDoctorCard doc={doc} {...props} verified />
+            </View>
+          ))}
         </ScrollView>
       </View>
     </View>
