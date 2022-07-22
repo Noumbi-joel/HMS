@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   ScrollView,
   Modal,
   Image,
+  Alert,
 } from "react-native";
 
 import anime from "../../../../assets/png/anime.png";
@@ -16,20 +17,65 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Divider } from "@rneui/themed";
 
+import { Button } from "@rneui/themed";
+
+import firebase from "../../../../firebase";
+
+import men from "../../../../assets/png/men.jpg";
+import women from "../../../../assets/png/women.png";
+
+import { useSelector } from "react-redux";
+
 //ratings
-import { Rating, AirbnbRating } from "react-native-ratings";
+import { AirbnbRating } from "react-native-ratings";
 
 const DoctorProfile = (props) => {
-  const { width } = Dimensions.get("window");
+  /* const { width } = Dimensions.get("window"); */
+  const [isBooking, setIsBooking] = useState(false);
+  const patient = useSelector((state) => state.user.patient);
+
+  const { name, speciality, userId, exp, time, gender } =
+    props.route.params.doctor;
+
+  const onBooking = async (
+    docName,
+    docId,
+    bookDate,
+    patientName,
+    patientId
+  ) => {
+    try {
+      setIsBooking(true)
+      await firebase
+        .firestore()
+        .collection("appointment")
+        .doc(firebase.auth().currentUser.uid + "-" + new Date().toISOString())
+        .set({
+          docName,
+          docId,
+          bookDate,
+          patientName,
+          patientId,
+        });
+      setIsBooking(false);
+      props.navigation.goBack();
+    } catch (err) {
+      Alert.alert("error while uploading a booking");
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.btm_doc_info_container}>
         <View style={[styles.linearLayout, { marginVertical: 20 }]}>
-          <Image source={anime} style={styles.docImg} />
+          {gender === "male" ? (
+            <Image source={men} style={styles.docImg} />
+          ) : (
+            <Image source={women} style={styles.docImg} />
+          )}
           <View style={{ marginLeft: 10 }}>
             <View style={styles.linearLayout}>
-              <Text style={styles.docName}>Dr Leonard Campbell</Text>
+              <Text style={styles.docName}>Dr {name}</Text>
               <Ionicons
                 name="checkmark-circle"
                 style={{ marginLeft: 5 }}
@@ -38,7 +84,7 @@ const DoctorProfile = (props) => {
               />
             </View>
             <Text style={{ fontFamily: "Montserrat", color: "#635f69" }}>
-              Cardiologist . 6 years of exp
+              {speciality} . {exp} of exp
             </Text>
           </View>
         </View>
@@ -87,50 +133,19 @@ const DoctorProfile = (props) => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={[styles.linearLayout]}
           >
-            <View style={styles.hour}>
-              <Text
-                style={{
-                  fontFamily: "Poppins",
-                  color: "#623f8c",
-                  marginLeft: 10,
-                }}
-              >
-                8h30 am
-              </Text>
-            </View>
-            <View style={styles.hour}>
-              <Text
-                style={{
-                  fontFamily: "Poppins",
-                  color: "#623f8c",
-                  marginLeft: 10,
-                }}
-              >
-                8h30 am
-              </Text>
-            </View>
-            <View style={styles.hour}>
-              <Text
-                style={{
-                  fontFamily: "Poppins",
-                  color: "#623f8c",
-                  marginLeft: 10,
-                }}
-              >
-                8h30 am
-              </Text>
-            </View>
-            <View style={styles.hour}>
-              <Text
-                style={{
-                  fontFamily: "Poppins",
-                  color: "#623f8c",
-                  marginLeft: 10,
-                }}
-              >
-                8h30 am
-              </Text>
-            </View>
+            {time.split(",").map((el, index) => (
+              <View style={styles.hour} key={index}>
+                <Text
+                  style={{
+                    fontFamily: "Poppins",
+                    color: "#623f8c",
+                    marginLeft: 10,
+                  }}
+                >
+                  {el} am
+                </Text>
+              </View>
+            ))}
           </ScrollView>
 
           <Divider style={{ marginVertical: 10 }} />
@@ -215,7 +230,7 @@ const DoctorProfile = (props) => {
                   showRating={false}
                 />
               </View>
-              
+
               <View style={styles.linearLayout}>
                 <Text style={{ fontFamily: "Montserrat", color: "#635f69" }}>
                   1 times
@@ -230,6 +245,21 @@ const DoctorProfile = (props) => {
               </View>
             </View>
           </View>
+          <Button
+            title="Book an appointment"
+            color={"#8a33ff"}
+            loading={isBooking}
+            onPress={() =>
+              onBooking(
+                name,
+                userId,
+                new Date().toISOString(),
+                patient.name,
+                firebase.auth().currentUser.uid
+              )
+            }
+            containerStyle={{ borderRadius: 20, marginVertical: 10 }}
+          />
         </ScrollView>
       </View>
     </View>
