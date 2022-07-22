@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 
 //tab navigator
@@ -31,6 +31,8 @@ import { un_profile_icon } from "../assets/svg/unfocused/un_profile";
 import { un_settings } from "../assets/svg/unfocused/un_settings";
 import { un_stethoscope_icon } from "../assets/svg/unfocused/un_stethoscope";
 import { un_patient_report } from "../assets/svg/unfocused/un_patient_reports";
+
+import firebase from "../firebase";
 
 //navigation container
 import { NavigationContainer } from "@react-navigation/native";
@@ -69,6 +71,7 @@ import Toggle from "react-native-toggle-element";
 
 //colors
 import { colors } from "../utils/colors";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 const appTheme = {
   colors: {
@@ -91,6 +94,7 @@ const AuthStack = (props) => {
 
 // doctors
 const HomeDoctorStack = (props) => {
+  const authCtx = useContext(AuthContext);
   return (
     <Stack.Navigator initialRouteName="homeDoctor">
       <Stack.Screen
@@ -118,7 +122,10 @@ const HomeDoctorStack = (props) => {
             </View>
           ),
           headerRight: () => (
-            <TouchableOpacity style={styles.headerRightContainer}>
+            <TouchableOpacity
+              onPress={() => authCtx.logout()}
+              style={styles.headerRightContainer}
+            >
               <SvgXml xml={alarm} width="100%" height="100%" />
             </TouchableOpacity>
           ),
@@ -165,8 +172,11 @@ const PlanningDoctorStack = (props) => {
             <Toggle
               value={toggleValue}
               onPress={(newState) => setToggleValue(newState)}
-              thumbStyle={{backgroundColor: "white"}}
-              trackBar={{inActiveBackgroundColor: "#dfe7f8", activeBackgroundColor: "#dfe7f8"}}
+              thumbStyle={{ backgroundColor: "white" }}
+              trackBar={{
+                inActiveBackgroundColor: "#dfe7f8",
+                activeBackgroundColor: "#dfe7f8",
+              }}
               containerStyle={{ marginRight: 10 }}
               leftComponent={
                 <AntDesign name="calendar" size={24} color="black" />
@@ -293,6 +303,31 @@ const ProfileStack = (props) => {
 
 const AppTabs = (props) => {
   const [isDoctor, setIsDoctor] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const uid = firebase.auth().currentUser.uid;
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("Doctor")
+      .doc(uid)
+      .get()
+      .then((user) => {
+        if (user.data()) {
+          setIsDoctor(true);
+          setIsLoading(false);
+          console.log(user.data());
+        }
+        if(!user.data()) {
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => console.error(err.message));
+  }, []);
+
+  if(isLoading){
+    return <LoadingOverlay />
+  }
+
   return (
     <Tab.Navigator
       screenOptions={{

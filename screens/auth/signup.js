@@ -28,10 +28,13 @@ import { Feather } from "@expo/vector-icons";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 
+import LoadingOverlay from "../../components/LoadingOverlay";
+
 const Signup = (props) => {
   const [seePwd, setSeePwd] = useState(true);
   const [male, setMale] = useState(false);
   const [female, setF] = useState(false);
+  const [isLoggin, setIsLoggin] = useState(false);
 
   const [roleType, setRoleType] = useState({
     patient: true,
@@ -51,6 +54,7 @@ const Signup = (props) => {
   });
 
   const onSignUp = async (email, password) => {
+    setIsLoggin(true);
     try {
       const res = await firebase
         .auth()
@@ -64,19 +68,11 @@ const Signup = (props) => {
       }
 
       try {
-        await firebase
-          .auth()
-          .currentUser.updateProfile({ displayName: user.name });
-      } catch (err) {
-        console.log("error while updating auth profile: " + err.message);
-      }
-
-      try {
         if (roleType.patient) {
           male
             ? await firebase
                 .firestore()
-                .collection("Patient")
+                .collection("patient")
                 .doc(res.user.uid)
                 .set({
                   ...user,
@@ -87,7 +83,7 @@ const Signup = (props) => {
                 })
             : await firebase
                 .firestore()
-                .collection("Patient")
+                .collection("patient")
                 .doc(res.user.uid)
                 .set({
                   ...user,
@@ -129,10 +125,16 @@ const Signup = (props) => {
       }
     } catch (err) {
       Alert.alert(err.message);
+      setIsLoggin(false);
     }
   };
 
   const { width, height } = Dimensions.get("window");
+
+  if(isLoggin){
+    return <LoadingOverlay />
+  }
+
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={[

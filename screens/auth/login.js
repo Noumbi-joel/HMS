@@ -24,11 +24,15 @@ import { Feather } from "@expo/vector-icons";
 
 import { AuthContext } from "../../store";
 
+import LoadingOverlay from "../../components/LoadingOverlay"
+
 const Login = (props) => {
   const [seePwd, setSeePwd] = useState(true);
+  const [isLoggin, setIsLoggin] = useState(false);
   const authCtx = useContext(AuthContext)
 
   const onLogin = async (email, password) => {
+    setIsLoggin(true);
     try {
       const res = await firebase
         .auth()
@@ -39,6 +43,7 @@ const Login = (props) => {
       console.log("LOGIN TOKEN " + token);
     } catch (err) {
       Alert.alert(err.message);
+      setIsLoggin(false);
     }
   };
 
@@ -48,6 +53,11 @@ const Login = (props) => {
   });
 
   const { width, height } = Dimensions.get("window");
+
+  if(isLoggin){
+    return <LoadingOverlay />
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.banner}>

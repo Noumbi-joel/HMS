@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 
 //global app navigation
@@ -12,24 +12,18 @@ import AppLoading from "expo-app-loading";
 //fonts
 import * as Font from "expo-font";
 import AuthContextProvider from "./store";
-/* import { AuthContext } from "./store"; */
+
+//redux
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import rootReducers from "./redux/reducers";
+
+//reducers
+const store = createStore(rootReducers, applyMiddleware(thunk));
 
 export default function App() {
-  /* const authCtx = useContext(AuthContext); */
   const [fontLoaded, setFontLoaded] = useState(false);
-  /* const [isTryingLoggin, setIsTryingLoggin] = useState(true);
-
-  useEffect(() => {
-    const fetchToken = async () => {
-      const storedToken = await AsyncStorage.getItem("token");
-      if (storedToken) {
-        authCtx.authenticate(storedToken);
-      }
-    };
-    fetchToken();
-    console.log("re render")
-  }, []); */
-  
 
   const loadFont = async () => {
     await Font.loadAsync({
@@ -48,11 +42,12 @@ export default function App() {
     );
   }
 
-
   return (
-    <AuthContextProvider>
-      <AppNavigator />
-    </AuthContextProvider>
+    <Provider store={store}>
+      <AuthContextProvider>
+        <AppNavigator />
+      </AuthContextProvider>
+    </Provider>
   );
 }
 

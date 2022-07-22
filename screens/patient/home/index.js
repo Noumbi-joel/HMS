@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,14 +12,20 @@ import {
 import { Input } from "@rneui/themed";
 import { AntDesign } from "@expo/vector-icons";
 
+import firebase from "../../../firebase";
+
 //components
 import NearByDoctorCard from "../../../components/NearByDoctorCard";
 import SearchDoctor from "../../../components/SearchDoctor";
 
+import { useSelector, useDispatch } from "react-redux";
+
 const Home = (props) => {
   const [modalVisible, setModalVisile] = useState(false);
+  const dispatch = useDispatch();
 
   const { width } = Dimensions.get("window");
+
   return (
     <View style={styles.container}>
       <Modal visible={modalVisible} transparent animationType="slide">
